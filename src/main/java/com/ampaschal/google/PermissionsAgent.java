@@ -11,7 +11,6 @@ public class PermissionsAgent {
 
 
     public static void premain(String agentArgs, Instrumentation inst) {
-        System.out.println("Permissions Agent called 3");
 
         inst.addTransformer(new PermissionsTransformer(), true);
 

@@ -14,4 +14,10 @@ public class TestHelper {
             System.out.println("An error occurred while writing the byte array to file: " + e.getMessage());
         }
     }
+
+    public static void logTime(String key) {
+        long time = System.currentTimeMillis();
+
+        System.out.println("[PROFILING]" + " " + key + " " + time);
+    }
 }

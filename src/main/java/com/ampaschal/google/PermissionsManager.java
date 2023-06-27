@@ -27,14 +27,12 @@ public class PermissionsManager {
 
     public static void setup() {
 //        Set the permissions object
-        System.out.println("Setting up permissions");
         try {
             parseAndSetPermissionsObject();
         } catch (IOException e) {
             System.out.println("Exception thrown");
             throw new RuntimeException(e);
         }
-        System.out.println("Finishing setup");
     }
 
     private static void parseAndSetPermissionsObject() throws IOException {
