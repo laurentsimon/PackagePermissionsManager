@@ -1,5 +1,7 @@
 package com.ampaschal.google;
 
+import com.ampaschal.google.enums.ProfileKey;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -15,7 +17,7 @@ public class TestHelper {
         }
     }
 
-    public static void logTime(String key) {
+    public static void logTime(ProfileKey key) {
         long time = System.currentTimeMillis();
 
         System.out.println("[PROFILING]" + " " + key + " " + time);

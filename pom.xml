@@ -64,7 +64,7 @@
                     <archive>
                         <manifestEntries>
                             <Premain-Class>
-                                com.ampaschal.google.PermissionsAgent
+                                com.ampaschal.google.agents.PermissionsAgent
                             </Premain-Class>
                             <Can-Retransform-Classes>
                                 true

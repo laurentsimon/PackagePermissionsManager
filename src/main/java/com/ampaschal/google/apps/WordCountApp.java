@@ -3,6 +3,7 @@ package com.ampaschal.google.apps;
 
 import com.ampaschal.google.PermissionsManager;
 import com.ampaschal.google.TestHelper;
+import com.ampaschal.google.enums.ProfileKey;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,10 +12,16 @@ import java.io.IOException;
 public class WordCountApp {
     public static void main(String[] args) {
 
-        TestHelper.logTime("main");
+        TestHelper.logTime(ProfileKey.MAIN_CALLED);
 
         PermissionsManager.setup();
 
+        performFileCount();
+
+        TestHelper.logTime(ProfileKey.MAIN_EXITING);
+    }
+
+    public static void performFileCount() {
         String fileName = "/usr/local/google/home/pamusuo/Research/PackagePermissionsManager/src/main/java/com/ampaschal/google/test.txt";
 
         try {
@@ -23,8 +30,6 @@ public class WordCountApp {
         } catch (IOException e) {
             System.out.println("An error occurred while reading the file: " + e.getMessage());
         }
-
-        TestHelper.logTime("main-end");
     }
 
     public static int countWords(String fileName) throws IOException {

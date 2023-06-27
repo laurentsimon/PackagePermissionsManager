@@ -1,22 +1,19 @@
 package com.ampaschal.google.transformers;
 
 import com.ampaschal.google.PermissionClassVisitor;
-import com.ampaschal.google.TestHelper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.util.TraceClassVisitor;
 
-import java.io.PrintWriter;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 
-public class PermissionsTransformer implements ClassFileTransformer {
+public class FilePermissionsTransformer implements ClassFileTransformer {
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
         try {
-            if (className.equals("java/io/FileInputStream") || className.equals("java/net/Socket") || className.equals("java/lang/ProcessBuilder")) {
+            if (className.equals("java/io/FileInputStream")) {
                 ClassReader classReader = new ClassReader(classfileBuffer);
                 ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
                 PermissionClassVisitor permClassVisitor = new PermissionClassVisitor(classWriter, className);

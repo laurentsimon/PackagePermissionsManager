@@ -13,6 +13,10 @@ public class ProcessExecApp {
 
         PermissionsManager.setup();
 
+        performShellExec();
+    }
+
+    public static void performShellExec() {
         try {
             // Command to execute
             String command = "ls -l";

@@ -12,6 +12,10 @@ public class ReadNetworkApp {
 
     public static void main(String[] args) {
         PermissionsManager.setup();
+        performNetworkCount();
+    }
+
+    public static void performNetworkCount() {
         try {
             String url = "https://api.sampleapis.com/wines/reds"; // Replace with your desired URL
 
