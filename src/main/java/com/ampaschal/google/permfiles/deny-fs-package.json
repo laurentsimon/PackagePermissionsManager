@@ -1,0 +1,15 @@
+{
+  "com.ampaschal.asm": {
+    "fs": true,
+    "fs.read": true,
+    "fs.allowedPaths": ["/usr/local/google/home/pamusuo/Research/ByteBuddyTutorial/ByteBuddyTutorial/./src/main/java/com/ampaschal/bytebuddy/filepractice/test.txt"],
+    "fs.deniedPaths": ["/etc/passwd"],
+    "net": false,
+    "net.allowedUrls": [],
+    "net.deniedUrls": [],
+    "runtime": false,
+    "runtime.exec": true,
+    "runtime.allowedCommands": [],
+    "runtime.deniedCommands": []
+  }
+}
