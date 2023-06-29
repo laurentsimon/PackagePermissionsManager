@@ -1,5 +1,7 @@
-package com.ampaschal.google.agents;
+package com.ampaschal.google.agents.agent2;
 
+import com.ampaschal.google.TestHelper;
+import com.ampaschal.google.enums.ProfileKey;
 import com.ampaschal.google.transformers.FilePermissionsTransformer;
 import com.ampaschal.google.transformers.PermissionsTransformer;
 
@@ -13,6 +15,8 @@ public class FilePermissionsAgent {
 
     public static void premain(String agentArgs, Instrumentation inst) {
 
+        TestHelper.logTime(ProfileKey.AGENT_CALLED);
+
         System.out.println("Permissions Agent");
 
         inst.addTransformer(new FilePermissionsTransformer(), true);
@@ -23,6 +27,8 @@ public class FilePermissionsAgent {
         } catch (UnmodifiableClassException e) {
             throw new RuntimeException(e);
         }
+
+        TestHelper.logTime(ProfileKey.AGENT_EXITING);
 
 
     }

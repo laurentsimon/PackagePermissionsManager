@@ -86,7 +86,7 @@ public class PermissionsManager {
 
     public static void checkPermission(int resourceTypeInt, int resourceOpInt, String resourceItem) {
 
-//        System.out.println("Checking permissions: " + ResourceType.getResourceType(resourceTypeInt));
+        System.out.println("Checking permissions: " + ResourceType.getResourceType(resourceTypeInt));
 
 //        I would have first returned true if the permissionsObject is null, but I am assuming instrumentations are done
 //        only if the permissions file is present
