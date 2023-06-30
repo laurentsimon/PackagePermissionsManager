@@ -1,8 +1,6 @@
 package com.ampaschal.google;
 
-import com.ampaschal.google.adapters.AddFilePermissionAdapter;
-import com.ampaschal.google.adapters.AddRuntimePermissionAdapter;
-import com.ampaschal.google.adapters.AddSocketPermissionAdapter;
+import com.ampaschal.google.adapters.*;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -25,11 +23,17 @@ public class PermissionClassVisitor extends ClassVisitor {
         if (mv != null) {
 //            I am removing the FileDescriptor constructor as having an fd implies the file has already been opened
             if (className.equals("java/io/FileInputStream") && name.equals("<init>") && !descriptor.equals("(Ljava/io/FileDescriptor;)V")) {
-                mv = new AddFilePermissionAdapter(access, descriptor, mv);
-            } else if (className.equals("java/net/Socket") && name.equals("connect") && descriptor.equals("(Ljava/net/SocketAddress;I)V")) {
-                mv = new AddSocketPermissionAdapter(access, descriptor, mv);
+                mv = new AddFileReadPermissionAdapter(access, descriptor, mv);
+            } else if (className.equals("java/net/Socket")) {
+                if (name.equals("connect") && descriptor.equals("(Ljava/net/SocketAddress;I)V")) {
+                    mv = new AddSocketPermissionAdapter(access, descriptor, mv);
+                } else if (name.equals("postAccept")) {
+                    mv = new AddSocketAcceptPermissionAdapter(access, descriptor, mv);
+                }
             } else if (className.equals("java/lang/ProcessBuilder") && name.equals("start") && descriptor.equals("([Ljava/lang/ProcessBuilder$Redirect;)Ljava/lang/Process;")) {
                 mv = new AddRuntimePermissionAdapter(access, descriptor, mv);
+            } else if (className.equals("java/io/FileOutputStream") && name.equals("<init>") && descriptor.equals("(Ljava/io/File;Z)V")) {
+                mv = new AddFileWritePermissionAdapter(access, descriptor, mv);
             }
 
         }

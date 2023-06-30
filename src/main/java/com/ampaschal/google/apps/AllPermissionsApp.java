@@ -13,6 +13,7 @@ public class AllPermissionsApp {
         WordCountApp.performFileCount();
         ReadNetworkApp.performNetworkCount();
         ProcessExecApp.performShellExec();
+        FileWriteApp.performFileWriteOperation();
 
         TestHelper.logTime(ProfileKey.MAIN_EXITING);
     }

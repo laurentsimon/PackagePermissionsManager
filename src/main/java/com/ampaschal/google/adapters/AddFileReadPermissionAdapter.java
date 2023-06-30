@@ -6,11 +6,11 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.LocalVariablesSorter;
 
-public class AddFilePermissionAdapter extends LocalVariablesSorter {
+public class AddFileReadPermissionAdapter extends LocalVariablesSorter {
 
     String methodDescriptor;
 
-    public AddFilePermissionAdapter(int access, String desc, MethodVisitor methodVisitor) {
+    public AddFileReadPermissionAdapter(int access, String desc, MethodVisitor methodVisitor) {
         super(Opcodes.ASM9, access, desc, methodVisitor);
         this.methodDescriptor = desc;
     }

@@ -6,6 +6,7 @@ import com.ampaschal.google.enums.ProfileKey;
 import com.ampaschal.google.transformers.PermissionsTransformer;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
 import java.net.Socket;
@@ -25,7 +26,7 @@ public class PermissionsAgent {
         inst.addTransformer(new PermissionsTransformer(), true);
 
         try {
-            inst.retransformClasses(FileInputStream.class);
+            inst.retransformClasses(FileInputStream.class, FileOutputStream.class);
         } catch (UnmodifiableClassException e) {
             throw new RuntimeException(e);
         }

@@ -5,6 +5,8 @@ public enum ResourceOp {
     READ (0),
     WRITE (1),
     EXECUTE (2),
+    CONNECT(3),
+    ACCEPT(4),
     ;
 
     private int id;

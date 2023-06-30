@@ -37,7 +37,7 @@ public class PermissionsManager {
 
     private static void parseAndSetPermissionsObject() throws IOException {
 
-        String permissionsFilePath = "/usr/local/google/home/pamusuo/Research/PackagePermissionsManager/src/main/java/com/ampaschal/google/permfiles/deny-fs-package.json";
+        String permissionsFilePath = "/usr/local/google/home/pamusuo/Research/PackagePermissionsManager/src/main/java/com/ampaschal/google/permfiles/sample-permissions.json";
 
         File permissionsFile = new File(permissionsFilePath);
 
@@ -86,7 +86,7 @@ public class PermissionsManager {
 
     public static void checkPermission(int resourceTypeInt, int resourceOpInt, String resourceItem) {
 
-        System.out.println("Checking permissions: " + ResourceType.getResourceType(resourceTypeInt));
+        System.out.println("Checking permissions: " + ResourceType.getResourceType(resourceTypeInt) + " - " + ResourceOp.getResourceOp(resourceOpInt)  + " - " + resourceItem);
 
 //        I would have first returned true if the permissionsObject is null, but I am assuming instrumentations are done
 //        only if the permissions file is present
@@ -153,6 +153,8 @@ public class PermissionsManager {
                 return true;
             } else if (permissionObject.getDeniedUrls().contains(resourceItem)) {
                 return false;
+            } else if ((resourceOp == ResourceOp.CONNECT && permissionObject.isNetConnect()) || (resourceOp == ResourceOp.ACCEPT && permissionObject.isNetAccept())) {
+                return true;
             } else {
                 return permissionObject.isNet();
             }

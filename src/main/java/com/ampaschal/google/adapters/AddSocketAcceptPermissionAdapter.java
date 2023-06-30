@@ -6,9 +6,9 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.LocalVariablesSorter;
 
-public class AddSocketPermissionAdapter extends LocalVariablesSorter {
+public class AddSocketAcceptPermissionAdapter extends LocalVariablesSorter {
 
-    public AddSocketPermissionAdapter(int access, String descriptor, MethodVisitor methodVisitor) {
+    public AddSocketAcceptPermissionAdapter(int access, String descriptor, MethodVisitor methodVisitor) {
         super(Opcodes.ASM9, access, descriptor, methodVisitor);
     }
 
@@ -25,8 +25,21 @@ public class AddSocketPermissionAdapter extends LocalVariablesSorter {
             methodVisitor.visitTryCatchBlock(label0, label1, label2, "java/lang/reflect/InvocationTargetException");
             methodVisitor.visitTryCatchBlock(label0, label1, label2, "java/lang/NoSuchMethodException");
             methodVisitor.visitTryCatchBlock(label0, label1, label2, "java/lang/ClassNotFoundException");
+
             methodVisitor.visitLabel(label0);
-            methodVisitor.visitLineNumber(14, label0);
+            methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
+            methodVisitor.visitFieldInsn(Opcodes.GETFIELD, "java/net/Socket", "impl", "Ljava/net/SocketImpl;");
+            methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/net/SocketImpl", "getInetAddress", "()Ljava/net/InetAddress;", false);
+            methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/net/InetAddress", "getHostName", "()Ljava/lang/String;", false);
+            int varLv = newLocal(Type.INT_TYPE);
+            methodVisitor.visitVarInsn(Opcodes.ASTORE, varLv);
+            Label label8 = new Label();
+            methodVisitor.visitLabel(label8);
+            methodVisitor.visitLineNumber(14, label8);
+
+
+//            methodVisitor.visitLabel(label0);
+//            methodVisitor.visitLineNumber(14, label0);
             methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/ClassLoader", "getSystemClassLoader", "()Ljava/lang/ClassLoader;", false);
             methodVisitor.visitLdcInsn("com.ampaschal.google.PermissionsManager");
             methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/ClassLoader", "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;", false);
@@ -68,14 +81,12 @@ public class AddSocketPermissionAdapter extends LocalVariablesSorter {
             methodVisitor.visitInsn(Opcodes.AASTORE);
             methodVisitor.visitInsn(Opcodes.DUP);
             methodVisitor.visitInsn(Opcodes.ICONST_1);
-            methodVisitor.visitInsn(Opcodes.ICONST_3);
+            methodVisitor.visitInsn(Opcodes.ICONST_4);
             methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
             methodVisitor.visitInsn(Opcodes.AASTORE);
             methodVisitor.visitInsn(Opcodes.DUP);
             methodVisitor.visitInsn(Opcodes.ICONST_2);
-            methodVisitor.visitVarInsn(Opcodes.ALOAD, 1);
-            methodVisitor.visitTypeInsn(Opcodes.CHECKCAST, "java/net/InetSocketAddress");
-            methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/net/InetSocketAddress", "getHostName", "()Ljava/lang/String;", false);
+            methodVisitor.visitVarInsn(Opcodes.ALOAD, varLv);
             methodVisitor.visitInsn(Opcodes.AASTORE);
             methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/reflect/Method", "invoke", "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;", false);
             methodVisitor.visitInsn(Opcodes.POP);

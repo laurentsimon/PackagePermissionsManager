@@ -20,6 +20,12 @@ public class PermissionObject {
     @JsonProperty("net")
     private boolean net;
 
+    @JsonProperty("net.connect")
+    private boolean netConnect;
+
+    @JsonProperty("net.accept")
+    private boolean netAccept;
+
     @JsonProperty("net.allowedUrls")
     private List<String> allowedUrls;
 
@@ -84,6 +90,22 @@ public class PermissionObject {
 
     public void setNet(boolean net) {
         this.net = net;
+    }
+
+    public boolean isNetConnect() {
+        return netConnect;
+    }
+
+    public void setNetConnect(boolean netConnect) {
+        this.netConnect = netConnect;
+    }
+
+    public boolean isNetAccept() {
+        return netAccept;
+    }
+
+    public void setNetAccept(boolean netAccept) {
+        this.netAccept = netAccept;
     }
 
     public List<String> getAllowedUrls() {
