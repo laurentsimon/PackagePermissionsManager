@@ -14,6 +14,7 @@ public class AllPermissionsApp {
         ReadNetworkApp.performNetworkCount();
         ProcessExecApp.performShellExec();
         FileWriteApp.performFileWriteOperation();
+        SocketConnectionApp.performSocketConnection();
 
         TestHelper.logTime(ProfileKey.MAIN_EXITING);
     }

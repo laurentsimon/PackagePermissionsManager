@@ -3,6 +3,10 @@ package com.ampaschal.google.apps;
 public class SocketConnectionApp {
 
     public static void main(String[] args) {
+        performSocketConnection();
+    }
+
+    public static void performSocketConnection() {
         // Start the server in a separate thread
         Thread serverThread = new Thread(() -> {
             System.out.println("Starting the server...");

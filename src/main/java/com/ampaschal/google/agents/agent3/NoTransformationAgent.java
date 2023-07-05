@@ -1,5 +1,6 @@
 package com.ampaschal.google.agents.agent3;
 
+import com.ampaschal.google.PermissionsManager;
 import com.ampaschal.google.TestHelper;
 import com.ampaschal.google.enums.ProfileKey;
 import com.ampaschal.google.transformers.PermissionsTransformer;
@@ -15,6 +16,8 @@ public class NoTransformationAgent {
         TestHelper.logTime(ProfileKey.AGENT_CALLED);
 
         System.out.println("No transformation Agent");
+
+        PermissionsManager.setup();
 
         TestHelper.logTime(ProfileKey.AGENT_EXITING);
 
