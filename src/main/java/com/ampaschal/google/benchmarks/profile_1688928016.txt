@@ -6,6 +6,13 @@ Agent-2 - Application with an agent and a class transformer that doesn't perform
 Agent-3 - Application with an agent that transforms only the FileInputStream class
 Agent-4 - Application with an agent that transforms all 4 classes (FileInputStream, FileOutputStream, Socket, ProcessBuilder)
 
+start-main - Time duration between when program is invoked and when the main method is called
+start-agent - Time duration between when the program is invoked and when the agent is called
+agent-setup - Time spent within the agent's premain method
+file-trans - Time spent when transforming a FileInputStream class
+main-exec - Time spent within the program's main method
+total-exec - Time duration between when the program is invoked and when the program returns
+
 Running avrora:
 Agent-0			77.33		0.00		0.00		0.00		14463.00		14563.00
 Agent-1			430.67		87.33		340.00		0.00		13426.67		13883.67
