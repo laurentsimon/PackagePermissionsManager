@@ -1,0 +1,9 @@
+Method name												Agent-0	Agent-1	Agent-2	Agent-3	Agent-4	
+FileBenchmarks.measureFileInputStream                         	9.47+-0.41us	9.27+-0.04us	9.60+-0.38us	36.30+-2.54us	34.88+-1.79us	
+FileBenchmarks.measureFileOutputStream                        	16.78+-0.26us	18.44+-1.56us	17.39+-0.72us	18.61+-1.23us	35.78+-5.05us	
+FileBenchmarks.measureFileRead                                	20.29+-3.43us	18.08+-3.74us	17.52+-2.85us	41.80+-5.11us	40.79+-5.97us	
+FileBenchmarks.measureFileWrite                               	845.62+-116.84us	804.51+-74.34us	783.87+-26.68us	773.95+-32.55us	750.41+-13.17us	
+SocketBenchmarks.measureSocketConnect                         	45.69+-2.22us	48.86+-4.76us	48.02+-2.01us	47.10+-2.14us	65.36+-15.23us	
+ProcessBuilderBenchmarks.measureExec                          	1996.85+-7.78us	2014.41+-36.40us	2094.00+-118.06us	2210.71+-114.68us	2283.87+-83.84us	
+PermissionsManagerBenchmarks.measurePermissionsCheck          	4.03+-0.98us	4.00+-0.24us	3.85+-0.12us	4.99+-2.69us	3.68+-0.13us	
+PermissionsManagerBenchmarks.measurePermissionsCheckReflection	8.58+-1.06us	8.32+-0.64us	8.73+-0.71us	9.13+-1.16us	8.15+-0.06us	

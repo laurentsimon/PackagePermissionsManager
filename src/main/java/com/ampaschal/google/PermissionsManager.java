@@ -97,6 +97,8 @@ public class PermissionsManager {
 
         ResourceOp resourceOp = ResourceOp.getResourceOp(resourceOpInt);
 
+        System.out.println("[PERMISSION] " + resourceType + " " + resourceOp + " " + resourceItem);
+
         if (resourceType == null || resourceOp == null) {
             throw new SecurityException("Invalid Permission Request");
         }

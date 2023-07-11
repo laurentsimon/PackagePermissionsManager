@@ -11,7 +11,6 @@ import java.net.URL;
 public class ReadNetworkApp {
 
     public static void main(String[] args) {
-        PermissionsManager.setup();
         performNetworkCount();
     }
 

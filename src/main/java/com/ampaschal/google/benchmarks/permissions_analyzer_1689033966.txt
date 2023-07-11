@@ -1,0 +1,23 @@
+Program			FS		READ	WRITE	NET	CONNECT	ACCEPT	RUNTIME	EXECUTE
+
+avrora      			7    		5    		2    		0  		0  		0  		0  		0  
+batik       			17   		12   		5    		0  		0  		0  		0  		0  
+biojava     			7    		5    		2    		0  		0  		0  		0  		0  
+cassandra   			6    		4    		2    		0  		0  		0  		0  		0  
+eclipse     			24110		16864		7246 		0  		0  		0  		0  		0  
+fop         			95   		89   		6    		0  		0  		0  		0  		0  
+graphchi    			98   		94   		4    		0  		0  		0  		0  		0  
+h2          			11   		7    		4    		0  		0  		0  		0  		0  
+jme         			15   		11   		4    		0  		0  		0  		0  		0  
+jython      			1566 		1532 		34   		0  		0  		0  		5  		5  
+kafka       			13   		11   		2    		0  		3  		0  		0  		0  
+luindex     			12   		8    		4    		0  		0  		0  		0  		0  
+lusearch    			6143 		4094 		2049 		0  		0  		0  		0  		0  
+pmd         			13   		10   		3    		0  		0  		0  		0  		0  
+spring      			32   		28   		4    		0  		84 		0  		0  		0  
+sunflow     			14   		10   		4    		0  		0  		0  		0  		0  
+tomcat      			819  		701  		118  		0  		176		0  		0  		0  
+tradebeans  			6    		4    		2    		0  		0  		0  		0  		0  
+tradesoap   			6    		4    		2    		0  		0  		0  		0  		0  
+xalan       			8719 		8692 		27   		0  		0  		0  		0  		0  
+zxing       			2506 		2502 		4    		0  		0  		0  		0  		0  
