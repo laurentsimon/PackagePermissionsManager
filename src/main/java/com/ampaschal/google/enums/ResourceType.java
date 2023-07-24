@@ -2,7 +2,7 @@ package com.ampaschal.google.enums;
 
 public enum ResourceType {
     FS (0),
-    Net (1),
+    NET(1),
     RUNTIME(2),
     ;
 

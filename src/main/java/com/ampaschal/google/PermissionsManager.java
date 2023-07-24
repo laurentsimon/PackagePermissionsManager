@@ -7,12 +7,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PermissionsManager {
+
+    private static PermissionsCallback callback;
 
     private static Map<String, PermissionObject> permissionObjectMap = new HashMap<>();
 
@@ -21,27 +20,59 @@ public class PermissionsManager {
 
     }
 
-    public static void mockTest(int resourceType, int resourceOp, String resourceItem) {
+    public static void mockTest(int resourceType, int resourceOp, String resourceItem) throws SecurityException {
         System.out.println("Substituting permission check " + resourceItem + resourceType + resourceOp);
+
+        throw new SecurityException("Trying things out");
     }
 
     public static void setup() {
+
+        String permissionsFilePath = "/usr/local/google/home/pamusuo/Research/PackagePermissionsManager/src/main/java/com/ampaschal/google/permfiles/sample-permissions.json";
+
+        setup(permissionsFilePath, null);
+
+    }
+
+    private static PermissionsCallback getDefaultCallback() {
+        return new PermissionsCallback() {
+            @Override
+            public void onPermissionRequested(String subject, int subjectPathSize, ResourceType resourceType, ResourceOp resourceOp, String resourceItem) {
+
+//                System.out.println("[PERMISSION] " + subject + " " + subjectPathSize + " " + resourceType + " " + resourceOp + " " + resourceItem);
+
+
+            }
+
+            @Override
+            public void onPermissionFailure(Set<String> subjectPaths, ResourceType resourceType, ResourceOp resourceOp, String resourceItem) {
+
+            }
+        };
+    }
+
+    public static void setup(String permissionsFile, PermissionsCallback permCallback) {
+
+        if (permissionsFile == null || permissionsFile.isEmpty()) {
+            return;
+        }
 //        Set the permissions object
         try {
-            parseAndSetPermissionsObject();
+            parseAndSetPermissionsObject(permissionsFile);
+            callback = permCallback != null ? permCallback : getDefaultCallback();
         } catch (IOException e) {
             System.out.println("Exception thrown");
             throw new RuntimeException(e);
         }
     }
 
-    private static void parseAndSetPermissionsObject() throws IOException {
-
-        String permissionsFilePath = "/usr/local/google/home/pamusuo/Research/PackagePermissionsManager/src/main/java/com/ampaschal/google/permfiles/sample-permissions.json";
+    private static void parseAndSetPermissionsObject(String permissionsFilePath) throws IOException {
 
         File permissionsFile = new File(permissionsFilePath);
 
-        Map<String, PermissionObject> permMap = new ObjectMapper().readValue(permissionsFile, new TypeReference<>() {});
+        TypeReference<Map<String, PermissionObject>> typeRef = new TypeReference<Map<String, PermissionObject>>() {};
+
+        Map<String, PermissionObject> permMap = new ObjectMapper().readValue(permissionsFile, typeRef);
 
         if (permMap != null && !permMap.isEmpty()) {
             permissionObjectMap.putAll(permMap);
@@ -67,7 +98,7 @@ public class PermissionsManager {
 
     private static Set<String> getSubjectPaths() {
 //        I used a set to avoid repeated entries. This will reduce the overhead when walking the list
-        Set<String> subjectPaths = new HashSet<>();
+        Set<String> subjectPaths = new LinkedHashSet<>();
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 
         String currentClass = stackTrace[1].getClassName();
@@ -97,8 +128,6 @@ public class PermissionsManager {
 
         ResourceOp resourceOp = ResourceOp.getResourceOp(resourceOpInt);
 
-        System.out.println("[PERMISSION] " + resourceType + " " + resourceOp + " " + resourceItem);
-
         if (resourceType == null || resourceOp == null) {
             throw new SecurityException("Invalid Permission Request");
         }
@@ -109,16 +138,20 @@ public class PermissionsManager {
             return;
         }
 
-//        Check the Permissions cache if access is permitted
-        Boolean cachedPermission = checkPermissionCache(subjectPaths, resourceType, resourceOp, resourceItem);
+        int subjectPathSize = subjectPaths.size();
 
-        if (cachedPermission != null) {
-            if (cachedPermission) {
-                return;
-            } else {
-                throw new SecurityException("File read " + resourceItem + " not permitted");
-            }
-        }
+        callback.onPermissionRequested(((String)subjectPaths.toArray()[0]), subjectPathSize, resourceType, resourceOp, resourceItem);
+
+//        Check the Permissions cache if access is permitted
+//        Boolean cachedPermission = checkPermissionCache(subjectPaths, resourceType, resourceOp, resourceItem);
+//
+//        if (cachedPermission != null) {
+//            if (cachedPermission) {
+//                return;
+//            } else {
+//                throw new SecurityException("File read " + resourceItem + " not permitted");
+//            }
+//        }
 
 
 //        Get the list of permission objects from the stack trace
@@ -128,11 +161,76 @@ public class PermissionsManager {
             return;
         }
 
+        System.out.println("Permission count: " + permissionObjects.size());
+
 //        We confirm each package in the stacktrace has the necessary permissions
         for (PermissionObject permissionObject: permissionObjects) {
             boolean permitted = performPermissionCheck(permissionObject, resourceType, resourceOp, resourceItem);
 
             if (!permitted) {
+                callback.onPermissionFailure(subjectPaths, resourceType, resourceOp, resourceItem);
+                throw new SecurityException("Access to " + resourceItem + " not permitted");
+            }
+        }
+
+    }
+
+    public static void checkPermissionEval(int resourceTypeInt, int resourceOpInt, String resourceItem, Set<String> mockSubjectPaths) {
+
+//        System.out.println("Checking permissions: " + ResourceType.getResourceType(resourceTypeInt) + " - " + ResourceOp.getResourceOp(resourceOpInt)  + " - " + resourceItem);
+
+//        I would have first returned true if the permissionsObject is null, but I am assuming instrumentations are done
+//        only if the permissions file is present
+
+//        System.out.println("Permissions Object size: " + permissionObjectMap.size());
+
+        ResourceType resourceType = ResourceType.getResourceType(resourceTypeInt);
+
+        ResourceOp resourceOp = ResourceOp.getResourceOp(resourceOpInt);
+
+        if (resourceType == null || resourceOp == null) {
+            throw new SecurityException("Invalid Permission Request");
+        }
+
+        Set<String> subjectPaths = getSubjectPaths();
+
+        subjectPaths = mockSubjectPaths.isEmpty() ? subjectPaths : mockSubjectPaths;
+
+        if (subjectPaths.isEmpty()) {
+            return;
+        }
+
+        int subjectPathSize = subjectPaths.size();
+
+        callback.onPermissionRequested(((String)subjectPaths.toArray()[0]), subjectPathSize, resourceType, resourceOp, resourceItem);
+
+//        Check the Permissions cache if access is permitted
+//        Boolean cachedPermission = checkPermissionCache(subjectPaths, resourceType, resourceOp, resourceItem);
+//
+//        if (cachedPermission != null) {
+//            if (cachedPermission) {
+//                return;
+//            } else {
+//                throw new SecurityException("File read " + resourceItem + " not permitted");
+//            }
+//        }
+
+
+//        Get the list of permission objects from the stack trace
+        Set<PermissionObject> permissionObjects = getPermissions(subjectPaths);
+
+        if (permissionObjects.isEmpty()) {
+            return;
+        }
+
+//        System.out.println("Permission count: " + permissionObjects.size());
+
+//        We confirm each package in the stacktrace has the necessary permissions
+        for (PermissionObject permissionObject: permissionObjects) {
+            boolean permitted = performPermissionCheck(permissionObject, resourceType, resourceOp, resourceItem);
+
+            if (!permitted) {
+                callback.onPermissionFailure(subjectPaths, resourceType, resourceOp, resourceItem);
                 throw new SecurityException("Access to " + resourceItem + " not permitted");
             }
         }
@@ -152,7 +250,7 @@ public class PermissionsManager {
             } else {
                 return permissionObject.isFs();
             }
-        } else if (resourceType == ResourceType.Net) {
+        } else if (resourceType == ResourceType.NET) {
             if (permissionObject.getAllowedUrls().contains(resourceItem)) {
                 return true;
             } else if (permissionObject.getDeniedUrls().contains(resourceItem)) {
@@ -177,6 +275,19 @@ public class PermissionsManager {
         return true;
     }
 
+    private static String getPackageName(String className) {
+        String[] segments = className.split("\\.");
+        int numSegments = Math.min(3, segments.length - 1);
+
+        StringBuilder packageNameBuilder = new StringBuilder();
+        for (int i = 0; i < numSegments - 1; i++) {
+            packageNameBuilder.append(segments[i]).append(".");
+        }
+        packageNameBuilder.append(segments[numSegments - 1]);
+
+        return packageNameBuilder.toString();
+    }
+
     private static String findClosestPackageName(String subjectPath) {
         String closestPackageName = null;
         int longestMatch = 0;
@@ -197,12 +308,13 @@ public class PermissionsManager {
         Set<PermissionObject> permissionObjects = new HashSet<>();
 
         for (String path: subjectPaths) {
-            String packageName = findClosestPackageName(path);
+            String packageName = getPackageName(path);
 
-            if (packageName != null) {
-                PermissionObject permObject = permissionObjectMap.get(packageName);
+            PermissionObject permObject = permissionObjectMap.get(packageName);
+            if (permObject != null) {
                 permissionObjects.add(permObject);
             }
+
         }
 
         return permissionObjects;
