@@ -45,14 +45,35 @@ public class AddFileReadPermissionAdapter extends LocalVariablesSorter {
         methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/StackTraceElement", "getClassName", "()Ljava/lang/String;", false);
         lv = newLocal(Type.INT_TYPE);
         methodVisitor.visitVarInsn(Opcodes.ASTORE, lv);
+
+
+
         Label label5 = new Label();
         methodVisitor.visitLabel(label5);
-        methodVisitor.visitLineNumber(15, label5);
+        methodVisitor.visitLineNumber(16, label5);
         methodVisitor.visitVarInsn(Opcodes.ALOAD, lv);
         methodVisitor.visitLdcInsn("jdk.internal.loader");
         methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/String", "startsWith", "(Ljava/lang/String;)Z", false);
         Label label6 = new Label();
         methodVisitor.visitJumpInsn(Opcodes.IFNE, label6);
+        methodVisitor.visitVarInsn(Opcodes.ALOAD, lv);
+        methodVisitor.visitLdcInsn("sun.misc.URLClassPath$FileLoader");
+        methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/String", "startsWith", "(Ljava/lang/String;)Z", false);
+        methodVisitor.visitJumpInsn(Opcodes.IFNE, label6);
+
+
+
+        // Label label5 = new Label();
+        // methodVisitor.visitLabel(label5);
+        // methodVisitor.visitLineNumber(15, label5);
+        // methodVisitor.visitVarInsn(Opcodes.ALOAD, lv);
+        // methodVisitor.visitLdcInsn("jdk.internal.loader");
+        // methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/String", "startsWith", "(Ljava/lang/String;)Z", false);
+        // Label label6 = new Label();
+        // methodVisitor.visitJumpInsn(Opcodes.IFNE, label6);
+
+
+
 
 
         methodVisitor.visitLabel(label0);
