@@ -39,7 +39,7 @@ public class PermissionsManager {
             @Override
             public void onPermissionRequested(String subject, int subjectPathSize, ResourceType resourceType, ResourceOp resourceOp, String resourceItem) {
 
-//                System.out.println("[PERMISSION] " + subject + " " + subjectPathSize + " " + resourceType + " " + resourceOp + " " + resourceItem);
+                // System.out.println("[PERMISSION] " + subject + " " + subjectPathSize + " " + resourceType + " " + resourceOp + " " + resourceItem);
 
 
             }
@@ -140,7 +140,7 @@ public class PermissionsManager {
 
         int subjectPathSize = subjectPaths.size();
 
-        callback.onPermissionRequested(((String)subjectPaths.toArray()[0]), subjectPathSize, resourceType, resourceOp, resourceItem);
+        callback.onPermissionRequested(null, subjectPathSize, resourceType, resourceOp, resourceItem);
 
 //        Check the Permissions cache if access is permitted
 //        Boolean cachedPermission = checkPermissionCache(subjectPaths, resourceType, resourceOp, resourceItem);
@@ -161,7 +161,7 @@ public class PermissionsManager {
             return;
         }
 
-        System.out.println("Permission count: " + permissionObjects.size());
+        // System.out.println("Permission count: " + permissionObjects.size());
 
 //        We confirm each package in the stacktrace has the necessary permissions
         for (PermissionObject permissionObject: permissionObjects) {
@@ -202,7 +202,7 @@ public class PermissionsManager {
 
         int subjectPathSize = subjectPaths.size();
 
-        callback.onPermissionRequested(((String)subjectPaths.toArray()[0]), subjectPathSize, resourceType, resourceOp, resourceItem);
+        callback.onPermissionRequested(null, subjectPathSize, resourceType, resourceOp, resourceItem);
 
 //        Check the Permissions cache if access is permitted
 //        Boolean cachedPermission = checkPermissionCache(subjectPaths, resourceType, resourceOp, resourceItem);
@@ -277,6 +277,11 @@ public class PermissionsManager {
 
     private static String getPackageName(String className) {
         String[] segments = className.split("\\.");
+
+        if (segments.length == 1) {
+//            Taking care of a unique scenario in Dacapobench where the main class had no specified Package name
+            return className;
+        }
         int numSegments = Math.min(3, segments.length - 1);
 
         StringBuilder packageNameBuilder = new StringBuilder();
@@ -284,6 +289,15 @@ public class PermissionsManager {
             packageNameBuilder.append(segments[i]).append(".");
         }
         packageNameBuilder.append(segments[numSegments - 1]);
+//        if (segments.length < 4) {
+//            System.out.println("Classname with <4 segments: " + className);
+//
+//            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+//
+//            for (StackTraceElement trace: stackTrace) {
+//                System.out.println(trace.getClassName() + "." + trace.getMethodName());
+//            }
+//        }
 
         return packageNameBuilder.toString();
     }

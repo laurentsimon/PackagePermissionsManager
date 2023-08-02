@@ -14,21 +14,22 @@ public class FilePermissionsTransformer implements ClassFileTransformer {
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+
+        if ("java/io/FileOutputStream".equals(className)) {
+            TestHelper.logTime(ProfileKey.FILE_TRANSFORMER_CALLED);
+        }
         try {
-            if (className.equals("java/io/FileInputStream")) {
-
-                TestHelper.logTime(ProfileKey.FILE_TRANSFORMER_CALLED);
-
+            if (className != null && (className.equals("java/io/FileOutputStream") || className.equals("java/net/Socket") || className.equals("java/lang/ProcessBuilder"))) {
                 ClassReader classReader = new ClassReader(classfileBuffer);
                 ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
                 PermissionClassVisitor permClassVisitor = new PermissionClassVisitor(classWriter, className);
                 classReader.accept(permClassVisitor, ClassReader.EXPAND_FRAMES);
 
-                byte[] transformedClass = classWriter.toByteArray();
+                if ("java/io/FileOutputStream".equals(className)) {
+                    TestHelper.logTime(ProfileKey.FILE_TRANSFORMER_EXITING);
+                }
 
-                TestHelper.logTime(ProfileKey.FILE_TRANSFORMER_EXITING);
-
-                return transformedClass;
+                return classWriter.toByteArray();
 
             }
         } catch (Exception ex) {
