@@ -21,8 +21,9 @@ public class AddSocketPermissionAdapter extends LocalVariablesSorter {
             Label label0 = new Label();
             Label label1 = new Label();
             Label label2 = new Label();
+            Label label12 = new Label();
             methodVisitor.visitTryCatchBlock(label0, label1, label2, "java/lang/IllegalAccessException");
-            methodVisitor.visitTryCatchBlock(label0, label1, label2, "java/lang/reflect/InvocationTargetException");
+            methodVisitor.visitTryCatchBlock(label0, label1, label12, "java/lang/reflect/InvocationTargetException");
             methodVisitor.visitTryCatchBlock(label0, label1, label2, "java/lang/NoSuchMethodException");
             methodVisitor.visitTryCatchBlock(label0, label1, label2, "java/lang/ClassNotFoundException");
             methodVisitor.visitLabel(label0);
@@ -91,6 +92,36 @@ public class AddSocketPermissionAdapter extends LocalVariablesSorter {
             methodVisitor.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
             methodVisitor.visitLdcInsn("Network Access Permission not granted");
             methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+
+
+            Label label13 = new Label();
+            methodVisitor.visitLabel(label13);
+            methodVisitor.visitLineNumber(31, label13);
+            methodVisitor.visitJumpInsn(Opcodes.GOTO, label6);
+            methodVisitor.visitLabel(label12);
+            methodVisitor.visitLineNumber(25, label12);
+            lv = newLocal(Type.INT_TYPE);
+            methodVisitor.visitVarInsn(Opcodes.ASTORE, lv);
+            Label label14 = new Label();
+            methodVisitor.visitLabel(label14);
+            methodVisitor.visitLineNumber(26, label14);
+            methodVisitor.visitVarInsn(Opcodes.ALOAD, lv);
+            methodVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/lang/reflect/InvocationTargetException", "getCause", "()Ljava/lang/Throwable;", false);
+            lv = newLocal(Type.INT_TYPE);
+            methodVisitor.visitVarInsn(Opcodes.ASTORE, lv);
+            Label label15 = new Label();
+            methodVisitor.visitLabel(label15);
+            methodVisitor.visitLineNumber(28, label15);
+            methodVisitor.visitVarInsn(Opcodes.ALOAD, lv);
+            methodVisitor.visitTypeInsn(Opcodes.INSTANCEOF, "java/lang/SecurityException");
+            methodVisitor.visitJumpInsn(Opcodes.IFEQ, label6);
+            Label label16 = new Label();
+            methodVisitor.visitLabel(label16);
+            methodVisitor.visitLineNumber(29, label16);
+            methodVisitor.visitVarInsn(Opcodes.ALOAD, lv);
+            methodVisitor.visitTypeInsn(Opcodes.CHECKCAST, "java/lang/SecurityException");
+            methodVisitor.visitInsn(Opcodes.ATHROW);
+
             methodVisitor.visitLabel(label6);
         }
     }

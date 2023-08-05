@@ -17,6 +17,7 @@ public class PermissionsTransformer implements ClassFileTransformer {
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
         try {
             if (className != null && (className.equals("java/io/FileInputStream") || className.equals("java/io/FileOutputStream") || className.equals("java/net/Socket") || className.equals("java/lang/ProcessBuilder"))) {
+                // System.out.println("Rewriting class: " + className);
                 ClassReader classReader = new ClassReader(classfileBuffer);
                 ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
                 PermissionClassVisitor permClassVisitor = new PermissionClassVisitor(classWriter, className);

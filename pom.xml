@@ -137,8 +137,63 @@
                             </archive>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>bytecode-agent-jar</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>bytecode-agent</classifier>
+                            <includes>
+                                <include>com/ampaschal/google/agents/agent5/**</include>
+                            </includes>
+                            <archive>
+                                <manifestEntries>
+                                    <Premain-Class>
+                                        com.ampaschal.google.agents.agent5.BytecodeGeneratorAgent
+                                    </Premain-Class>
+                                    <Can-Retransform-Classes>
+                                        true
+                                    </Can-Retransform-Classes>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <id>agent-shaded-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>shaded</shadedClassifierName>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.ampaschal.google.agents.agent4:*</include>
+                                </includes>
+                            </artifactSet>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.ampaschal.google.agents.agent4.PermissionsAgent</mainClass>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                                    <resource>org/ow2/asm/**</resource>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -156,26 +211,5 @@
         </plugins>
     </build>
 
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-jar-plugin</artifactId>-->
-<!--                <version>2.4</version>-->
-<!--                <configuration>-->
-<!--                    <archive>-->
-<!--                        <manifestEntries>-->
-<!--                            <Premain-Class>-->
-<!--                                com.ampaschal.google.agents.agent4.PermissionsAgent-->
-<!--                            </Premain-Class>-->
-<!--                            <Can-Retransform-Classes>-->
-<!--                                true-->
-<!--                            </Can-Retransform-Classes>-->
-<!--                        </manifestEntries>-->
-<!--                    </archive>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
 
 </project>

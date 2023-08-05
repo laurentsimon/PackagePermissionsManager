@@ -12,8 +12,8 @@ public class DumpBytecodeApp {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         String callerName = stackTrace[1].getClassName(); // 2 represents the index of the class calling the class's constructor
 
-//        TODO: Does this skip classes loaded by reflection?
-        if (!callerName.startsWith("jdk.internal.loader")) {
+//        This check avoids a StackOverFLow error resulting from an infinite loop where loadClass method tries calling FileInputStream again
+        if (!callerName.startsWith("jdk.internal.loader") && !callerName.startsWith("sun.misc.URLClassPath$FileLoader")) {
             try {
                 Class<?> permManagerClass = ClassLoader.getSystemClassLoader().loadClass("com.ampaschal.google.PermissionsManager");
                 Method logMethod = permManagerClass.getMethod("mockTest", int.class, int.class, String.class);

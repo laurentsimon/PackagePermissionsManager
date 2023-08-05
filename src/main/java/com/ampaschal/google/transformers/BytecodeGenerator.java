@@ -12,7 +12,7 @@ public class BytecodeGenerator implements ClassFileTransformer {
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-        if(className.equals("com/ampaschal/asm/filepractice/apps/DumpExecBytecodeApp")) {
+        if(className.equals("com/ampaschal/google/apps/DumpBytecodeApp")) {
 
             System.out.println("DumpExecBytecodeApp class found");
             ClassReader classReader = new ClassReader(classfileBuffer);

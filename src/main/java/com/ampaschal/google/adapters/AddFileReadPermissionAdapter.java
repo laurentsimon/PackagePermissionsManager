@@ -15,6 +15,7 @@ public class AddFileReadPermissionAdapter extends LocalVariablesSorter {
         this.methodDescriptor = desc;
     }
 
+    // visitCode is called once for every method. We add our instrumentation here so it appears at the top of the method
     @Override
     public void visitCode() {
         super.visitCode();
